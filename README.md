@@ -2,13 +2,6 @@
 
 
 
-## Descripción
-
-
-
-## Características Previstas
-
-
 
 ## Tecnologías Utilizadas
 
