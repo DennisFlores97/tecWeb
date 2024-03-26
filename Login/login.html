@@ -1,0 +1,89 @@
+<!<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
+    <style type="text/css">
+        body{
+            background-color: #4a86ef;
+            font-family: Helvetica;
+        }
+        
+        div.iniciosesion{
+            background-color: #ffffff;
+            width: 300px;
+            height: 350px;
+            margin-top: 170px;
+            padding-top: 60px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+        }
+
+        h1{
+            color: #4a7fa0;
+            text-align: center;
+        }
+
+        #usuario, #password {
+            background-color: #eee0ff;
+            width: 200px;
+            height: 30px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        #btnEnviar{
+            background-color: #187fc2; 
+            width: 150px;
+            height: 30px;
+            margin: 20px auto;
+            display: block;
+            color: white;
+            border-radius: 20px;
+            border: none;          
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <div class="iniciosesion">
+            <form method="POST">
+                <h1>Iniciar Sesión</h1>
+                <input type="text" name="usuario" id="usuario" placeholder="Nombre de usuario" required><br>
+                <input type="password" name="password" id="password" placeholder="Contraseña" required><br>
+                <input id="btnEnviar" name="btnEnviar" type="submit" value="Enviar"/>
+            </form>     
+        </div>      
+    </center>
+</body>
+</html>
+
+<?php
+session_start(); // Iniciar la sesión
+
+// Conexión con la base de datos
+if(isset($_POST['btnEnviar'])) {
+    $conexion = mysqli_connect('localhost:3307', 'root', '', 'ucb_dron');
+    $usuario = $_POST['usuario'];
+    $password = $_POST['password'];
+
+    // SELECT
+    $sql = "SELECT * FROM usuarios WHERE usuario='$usuario' AND password='$password'";
+    $result = mysqli_query($conexion, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Inicio de sesión correcto
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['usuario'] = $row['usuario']; // Almacenar el usuario en la sesión
+        header('Location: ventas.php'); // Redirigir a pedidos.php
+        exit();
+    } else {
+        // Inicio de sesión incorrecto
+        $error = "Usuario o contraseña incorrectos";
+    }
+}
+?>
